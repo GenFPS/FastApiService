@@ -1,0 +1,14 @@
+# Ignoring all __init__.py files
+*__init__.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Ingoring all files wich were posted through the service
+app/uploaded_files/
+
+# Ignoring config pycharm's file
+.idea/
