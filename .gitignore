@@ -10,5 +10,5 @@ __pycache__/
 # Ingoring all files wich were posted through the service
 app/uploaded_files/
 
-# Ignoring config pycharm's file
+# Ignoring configs pycharm's file
 .idea/
