@@ -1,7 +1,12 @@
 import io
+import json
 import PyPDF2
+import sys
 
 from fastapi import FastAPI, UploadFile
+
+sys.path.append(r'C:\Users\fedser\PycharmProjects\fastApi_test\app')
+from models.models import ParsedData
 
 app = FastAPI()
 
@@ -39,6 +44,29 @@ async def upload_file(uploaded_file: UploadFile):
     with open(f'app/uploaded_files/pdf_files/posted_{filename}', 'wb') as output_pdf:
         pdf_writer.write(output_pdf)
     return {'pdf_filename': uploaded_file.filename}
+
+
+# Тестовая версия отправки данных в формате json
+@app.post("/parsed_data/")
+async def post_json(parsed_data: ParsedData):
+    print(parsed_data)
+    return parsed_data
+
+
+# Тестовая версия получения данных в формате json
+@app.get("/json_data/{json_file}")
+async def get_json(json_file: str):
+    with open(file=f'app/uploaded_files/json_files/{json_file}', mode='r', encoding='utf-8') as file:
+        data = json.load(file)
+    return {
+        "inn_kpp": data["inn_kpp"],
+        "invoice": data["invoice"],
+        "data_table": data["data_table"],
+        "total_without_tax": data["total_without_tax"],
+        "amount_of_tax":  data["amount_of_tax"],
+        "total_amount": data["total_amount"]
+    }
+
 
 if __name__ == '__main__':
     pass
