@@ -92,18 +92,28 @@ async def get_json(json_file: str):
     }
 
 
-@app.post("/items/")
-async def get_item(item: Item):
-    file_name: str = 'temp.json'
-    data: dict = {
+@app.post("/items/{item_id}")
+async def get_item(item: Item, item_id: int, query: str | None = None):
+    file_name: str = f'temp_{item_id}.json'
+    logger.info("Название файла: %s", file_name)
+
+    item_dict: dict = {
         "name": item.name,
         "description": item.description,
         "price": item.price,
         "tax": item.tax
     }
+    if item.tax is not None:
+        full_price: float = item.price + item.tax
+        item_dict.update({"full_price": full_price})
+        logger.info("Обновленная цена: %s", item_dict["full_price"])
+    if query:
+        item_dict.update({"query": query})
+
     with open(file=f'uploaded_files/json_files/{file_name}', mode='w', encoding='utf-8') as file:
-        json.dump(obj=data, fp=file, indent=2)
-    return item
+        json.dump(obj=item_dict, fp=file, indent=2)
+    return item_dict
+
 
 if __name__ == '__main__':
     # Вот тут можно будет подключить (или изменить) логи и другие настройки.
