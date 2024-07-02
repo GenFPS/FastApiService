@@ -12,3 +12,5 @@ app/uploaded_files/
 
 # Ignoring configs pycharm's file
 .idea/
+
+data.log
