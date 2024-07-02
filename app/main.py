@@ -4,7 +4,8 @@ import logging
 import PyPDF2
 import uvicorn
 
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, Query, HTTPException
+from typing import Annotated
 
 from app.models.models import ParsedData, Item
 from app.configs.settings import settings
@@ -93,7 +94,8 @@ async def get_json(json_file: str):
 
 
 @app.post("/items/{item_id}")
-async def get_item(item: Item, item_id: int, query: str | None = None):
+async def get_item(item: Item, item_id: int, query: Annotated[str | None, Query(max_length=50)] = None):
+    # Query(max_length=50) - означает, что значение запроса не может превышать больше 50 символов.
     file_name: str = f'temp_{item_id}.json'
     logger.info("Название файла: %s", file_name)
 
@@ -111,7 +113,7 @@ async def get_item(item: Item, item_id: int, query: str | None = None):
         item_dict.update({"query": query})
 
     with open(file=f'uploaded_files/json_files/{file_name}', mode='w', encoding='utf-8') as file:
-        json.dump(obj=item_dict, fp=file, indent=2)
+        json.dump(obj=item_dict, fp=file, indent=2, ensure_ascii=False)
     return item_dict
 
 
