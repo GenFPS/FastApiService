@@ -6,7 +6,7 @@ import uvicorn
 
 from fastapi import FastAPI, UploadFile
 
-from app.models.models import ParsedData
+from app.models.models import ParsedData, Item
 from app.configs.settings import settings
 
 app = FastAPI()
@@ -91,6 +91,19 @@ async def get_json(json_file: str):
         "total_amount": data["total_amount"]
     }
 
+
+@app.post("/items/")
+async def get_item(item: Item):
+    file_name: str = 'temp.json'
+    data: dict = {
+        "name": item.name,
+        "description": item.description,
+        "price": item.price,
+        "tax": item.tax
+    }
+    with open(file=f'uploaded_files/json_files/{file_name}', mode='w', encoding='utf-8') as file:
+        json.dump(obj=data, fp=file, indent=2)
+    return item
 
 if __name__ == '__main__':
     # Вот тут можно будет подключить (или изменить) логи и другие настройки.

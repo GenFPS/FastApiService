@@ -9,3 +9,10 @@ class ParsedData(BaseModel):
     amount_of_tax: str
     total_amount: str
 
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
