@@ -11,15 +11,17 @@ from app.configs.settings import settings
 
 app = FastAPI()
 
+# Создаем главный объект logger
 logger = logging.getLogger("myLogger")
 logger.setLevel(logging.DEBUG)
 
-# Создаем обработчик для записи логов в файл
+# Создаем обработчик для записи логов в файл (консольный обработчик работает от uvicorn по дефолту)
 file_handler = logging.FileHandler(filename="data.log", encoding="utf-8", mode="w")
 file_handler.setLevel(logging.DEBUG)
 
-# Создаем форматтер для логов
+# Создаем формат для логов
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Устанавливаем формат для файлового обработчика
 file_handler.setFormatter(formatter)
 
 # Добавляем обработчик к логгеру

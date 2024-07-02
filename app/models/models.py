@@ -2,6 +2,9 @@ from pydantic import BaseModel
 
 
 class ParsedData(BaseModel):
+    """
+    Для обработки json-файлов
+    """
     inn_kpp: str
     invoice: str
     data_table: list[list[str]]
