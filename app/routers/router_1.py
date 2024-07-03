@@ -35,7 +35,7 @@ async def router_main():
 
 
 # Отправка текстового файла
-@router_1.post("/upload_txt/")
+@router_1.post("/upload_txt/", status_code=201)
 async def upload_file(uploaded_file: UploadFile):
     content = await uploaded_file.read()
     # Получаем название текстового файла
@@ -49,7 +49,7 @@ async def upload_file(uploaded_file: UploadFile):
 
 
 # отправка pdf файла
-@router_1.post("/upload_pdf/")
+@router_1.post("/upload_pdf/", status_code=201)
 async def upload_file(uploaded_file: UploadFile):
     # В переменной content содержится байт-код содержимого pdf (полученного через POST запросы)
     content = await uploaded_file.read()
@@ -70,14 +70,14 @@ async def upload_file(uploaded_file: UploadFile):
 
 
 # Тестовая версия отправки данных в формате json
-@router_1.post("/parsed_data/")
+@router_1.post("/parsed_data/", status_code=201)
 async def post_json(parsed_data: ParsedData):
     logger.info("parsed_data: \t%s", parsed_data)
     return parsed_data
 
 
 # Тестовая версия получения данных в формате json
-@router_1.get("/json_data/{json_file}")
+@router_1.get("/json_data/{json_file}", status_code=201)
 async def get_json(json_file: str):
     with open(file=f'uploaded_files/json_files/{json_file}', mode='r', encoding='utf-8') as file:
         data = json.load(file)
@@ -92,7 +92,7 @@ async def get_json(json_file: str):
     }
 
 
-@router_1.post("/items/{item_id}")
+@router_1.post("/items/{item_id}", status_code=201)
 async def get_item(item: Item, item_id: int, query: Annotated[str | None, Query(max_length=50)] = None):
     # Query(max_length=50) - означает, что значение запроса не может превышать больше 50 символов.
     file_name: str = f'temp_{item_id}.json'
