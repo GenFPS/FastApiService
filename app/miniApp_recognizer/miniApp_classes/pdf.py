@@ -20,10 +20,6 @@ class PdfAnalyzer:
 
 
 class PdfTextReader(PdfAnalyzer):
-    """
-    Предназначен только для чтения текста из pdf файла:
-    """
-
     # Наследуем метод __init__ из PdfAnalyzer
     def __init__(self, path_dir: str, pdf_file: str):
         super().__init__(path_dir, pdf_file)
@@ -32,10 +28,10 @@ class PdfTextReader(PdfAnalyzer):
         text = ''
 
         with open(self._full_path, 'rb') as file:
-            pdf_reader = PyPDF2.PdfFileReader(file)
-            num_pages = pdf_reader.numPages
+            pdf_reader = PyPDF2.PdfReader(file)
+            num_pages = len(pdf_reader.pages)
 
             for page_num in range(num_pages):
-                page = pdf_reader.getPage(page_num)
+                page = pdf_reader.pages[page_num]
                 text += page.extract_text()
         return text

@@ -1,7 +1,5 @@
-import io
 import json
 import logging
-import PyPDF2
 
 
 from fastapi import APIRouter, UploadFile, Query
@@ -46,27 +44,6 @@ async def upload_file(uploaded_file: UploadFile):
     logger.info("The file was written!")
     return {"filename": uploaded_file.filename,
             "content": content}
-
-
-# отправка pdf файла
-@router_1.post("/upload_pdf/", status_code=201)
-async def upload_file(uploaded_file: UploadFile):
-    # В переменной content содержится байт-код содержимого pdf (полученного через POST запросы)
-    content = await uploaded_file.read()
-    logger.info("The content of pdf was loaded")
-    # Записываем файл (сохраняем содержимое файла)
-    pdf_writer = PyPDF2.PdfWriter()
-    pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
-    # Проходимся по каждой странице и добавляем ее к pdf_writer
-    for page_num in range(len(pdf_reader.pages)):
-        logger.debug("Added page: %s", page_num+1)
-        pdf_writer.add_page(pdf_reader.pages[page_num])
-    # Записываем полученное имя файла
-    file_name = uploaded_file.filename
-    logger.info("The name of pdf file: \t%s", file_name)
-    with open(f'uploaded_files/pdf_files/posted_{file_name}', 'wb') as output_pdf:
-        pdf_writer.write(output_pdf)
-    return {'pdf_filename': file_name}
 
 
 # Тестовая версия отправки данных в формате json
